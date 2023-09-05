@@ -20,6 +20,7 @@ state_options = [{'label': x, 'value': x} for x in df['Ano'].unique()]
 labels=[{'DOS','Web','Worm','Scan','Invasao'} for x in df['Ano'].unique()]
 total_anos = df.copy(deep = True)
 total_anos = total_anos.groupby(['Ano']).sum()
+tipos = ['Worm','DOS','Invasao','Web','Scan','Fraude','Outros']
 
 ##LAYOUT PRINCIPAL DO DASHBOARD "Html"
 app.layout = dbc.Container([
@@ -35,6 +36,12 @@ app.layout = dbc.Container([
                 multi = True,
                 options = state_options
             ),
+            dcc.Dropdown(
+                id = 'Tipo',
+                value = 'DOS',
+                multi = True,
+                options = tipos
+            )
         ])
     ]),
      dbc.Row([
@@ -48,9 +55,16 @@ app.layout = dbc.Container([
         dbc.Col([ 
             dbc.Row([ 
                 html.H3('Percentual de ataques'),
+                dcc.Dropdown(
+                    id = 'pizza',
+                    options = state_options,
+                    value = 2019,
+                    multi = False,
+                    clearable = False 
+                ),
                 dcc.Graph(id='pizza_pie'), 
             ]) 
-        ]), 
+        ]) 
     ]), 
 
     ##Graficos de Caixa
@@ -122,36 +136,52 @@ app.layout = dbc.Container([
                 dcc.Graph(id = 'box6')
                 ])
             ])
-        ])
+        ]),
+    dbc.Row([
+        dbc.Col([
+            dbc.Row([
+                dcc.Dropdown(
+                    id = 'Outros',
+                    value = state_options[0]['label'],
+                    options = state_options
+                    ), 
+                
+                dcc.Graph(id = 'box7')
+                ])
+            ])
     ])
+])
 
 ##Callbacks para a interacao e atualizacoo dos graficos
 
 @app.callback(
     Output('line_graph', 'figure'),
     Input('Ano', 'value'),
+    Input('Tipo', 'value'),
     Input(ThemeSwitchAIO.ids.switch('theme'), 'value') 
 )
-def line(Ano, toggle):
+def line(Ano, Tipo, toggle):
     templates = template_theme2 if toggle else template_theme1
 
-    df_data = df.copy(deep = True) # isso é muito pesado mano, bora tentar melhorar isso
+    df_data = df.copy(deep = True)
     mask = df_data['Ano'].isin(Ano)
 
-    fig = px.line(df_data[mask], x = 'Mes', y = 'DOS', color = 'Ano', template=templates) #mexe em nos eixos do grafico principal
+    fig = px.line(df_data[mask], x = 'Mes', y = Tipo, color = 'Ano', template=templates) #mexe em nos eixos do grafico principal
 
     return fig
 
 @app.callback( 
     [Output('pizza_pie', 'figure')], 
+    [Input('pizza', 'value')],
     [Input(ThemeSwitchAIO.ids.switch('theme'), 'value')]  
 ) 
-def update_graphs(toggle): 
+def update_graphs(Anos, toggle): 
     templates = template_theme2 if toggle else template_theme1
     tipos = ['Worm','DOS','Invasao','Web','Scan','Fraude','Outros']
-    Anos = total_anos.loc[:,tipos]
+    ddff = total_anos.loc[:,tipos]
+    dff = ddff.transpose()
 
-    pie_fig = px.pie(total_anos, values=Anos[tipos].sum(), names=tipos) 
+    pie_fig = px.pie(dff, values=Anos, names=tipos) 
     pie_fig.update_layout(template=templates) 
 
     return [pie_fig]
@@ -243,6 +273,21 @@ def box6(Worm, toggle):
     data_jogador = df_data[df_data['Ano'].isin([Worm])]
 
     fig = px.box(data_jogador, x = 'Worm', template = templates, points='all', title=Worm)
+
+    return fig
+
+@app.callback(
+    Output('box7', 'figure'),
+    Input('Outros', 'value'),
+    Input(ThemeSwitchAIO.ids.switch('theme'), 'value') 
+)
+def box7(Outros, toggle):
+    templates = template_theme2 if toggle else template_theme1
+
+    df_data = df.copy(deep = True)
+    data_jogador = df_data[df_data['Ano'].isin([Outros])]
+
+    fig = px.box(data_jogador, x = 'Outros', template = templates, points='all', title=Outros)
 
     return fig
 
