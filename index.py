@@ -7,14 +7,14 @@ import matplotlib.pyplot as plt
 from app import *
 from dash_bootstrap_templates import ThemeSwitchAIO
 
-url_theme1 = dbc.themes.VAPOR ## cor do pljogador de fundo
-url_theme2 = dbc.themes.FLATLY ## cor do pljogador de fundo
+url_theme1 = dbc.themes.VAPOR ## cor do plano de fundo
+url_theme2 = dbc.themes.FLATLY ## cor do plano de fundo
 
 template_theme1 = 'vapor'
 template_theme2 = 'flatly'
 
 df = pd.read_csv('Seguranca_informacao.csv') ## Abre o arquivo
-state_options = [{'label': x, 'value': x} for x in df['Ano'].unique()] ## Escolhe uma coluna para comparacao
+state_options = [{'label': x, 'value': x} for x in df['Ano'].unique()]
 labels=[{'DOS','Web','Worm','Scan','Invasao'} for x in df['Ano'].unique()]
 total_anos = df.copy(deep = True)
 total_anos = total_anos.groupby(['Ano']).sum()
@@ -22,14 +22,14 @@ total_anos = total_anos.groupby(['Ano']).sum()
 ##LAYOUT PRINCIPAL DO DASHBOARD "Html"
 app.layout = dbc.Container([
    
-    ##Linha
+    ##Grafico de Linha
     dbc.Row([
         dbc.Col([
             ThemeSwitchAIO(aio_id = 'theme', themes = [url_theme2,url_theme1]),##cor do fundo
             html.H3('Mes x DOS'),
             dcc.Dropdown(
                 id = 'Ano',
-                value = [state['label'] for state in state_options[:3]],
+                value = [state['label'] for state in state_options[:10]],
                 multi = True,
                 options = state_options
             ),
@@ -41,24 +41,17 @@ app.layout = dbc.Container([
         ])
     ]),
     
-    ##Pizza
+    ##Grafico de Pizza
     dbc.Row([ 
         dbc.Col([ 
             dbc.Row([ 
                 html.H3('Percentual de ataques'),
-                #dcc.Dropdown( 
-                #    id='pizza', 
-                #    options=[0,1,2,3,4,5,6,7,8,9], 
-                #    value= '0', 
-                #    multi = False,
-                #    clearable = False
-                #), 
                 dcc.Graph(id='pizza_pie'), 
             ]) 
         ]), 
     ]), 
 
-    ##Caixa
+    ##Graficos de Caixa
     dbc.Row([
         dbc.Col([
             dbc.Row([
@@ -66,7 +59,7 @@ app.layout = dbc.Container([
                     id = 'Web',
                     value = state_options[0]['label'],
                     options = state_options
-                    ), # pode usar o sm e o md aqui também
+                    ), 
                 
                 dcc.Graph(id = 'box1')
                 ]),
@@ -89,7 +82,7 @@ app.layout = dbc.Container([
                     id = 'Scan',
                     value = state_options[0]['label'],
                     options = state_options
-                    ), # pode usar o sm e o md aqui também
+                    ), 
                 
                 dcc.Graph(id = 'box3')
                 ])
@@ -112,7 +105,7 @@ app.layout = dbc.Container([
                     id = 'Invasao',
                     value = state_options[0]['label'],
                     options = state_options
-                    ), # pode usar o sm e o md aqui também
+                    ), 
                 
                 dcc.Graph(id = 'box5')
                 ])
@@ -130,7 +123,7 @@ app.layout = dbc.Container([
         ])
     ])
 
-
+##Callbacks para a interacao e atualizacoo dos graficos
 
 @app.callback(
     Output('line_graph', 'figure'),
@@ -149,7 +142,6 @@ def line(Ano, toggle):
 
 @app.callback( 
     [Output('pizza_pie', 'figure')], 
-    ##[Input('pizza', 'value')], 
     [Input(ThemeSwitchAIO.ids.switch('theme'), 'value')]  
 ) 
 def update_graphs(toggle): 
