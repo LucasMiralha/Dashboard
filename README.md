@@ -1,10 +1,10 @@
 # Dashboard
 # Projeto de dashboard utilizando python e suas biblioteca #
 
+* Projeto realizado para a materia Probabilidade estatistica do quarto semestre de engenharia da computação do Centro universitario do Estado do Pará [Cesupa](https://www.cesupa.br/) *
+
+
 O banco de dados utilizado foi retirado deste link: https://www.kaggle.com/datasets/rodrigoriboldi/incidentes-de-segurana-da-informao-no-brasil?resource=download
-
-
-
 Objetivo do Projeto:
 O objetivo deste projeto é permitir que os alunos apliquem seus conhecimentos de Estatística e comecem a entrar na área de Data Science, utilizando a biblioteca Pandas para análise de dados e a biblioteca Dash para criar um dashboard interativo. Os alunos selecionarão um conjunto de dados do Kaggle, realizarão análises exploratórias, aplicarão tratamentos de dados e, por fim, criarão um dashboard que apresente visualizações significativas dos dados.
 
