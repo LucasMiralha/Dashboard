@@ -19,4 +19,8 @@ Planejamento do Dashboard: Os alunos devem planejar as visualizações que desej
 
 Criação do Dashboard utilizando Dash: Utilizando a biblioteca Dash, os alunos criarão um dashboard interativo que contenha visualizações relevantes e filtros para explorar os dados de forma dinâmica.
 
+Equipe:
 
+Lucas Miralha (https://github.com/LucasMiralha)
+
+Thiago França (https://github.com/Thiagottf)
