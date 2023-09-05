@@ -1,5 +1,5 @@
 ## Thiago França 22300013
-## Lucas Miralha 223000
+## Lucas Miralha 22300040
 from dash import html, dcc, Input, Output
 import plotly.express as px
 import plotly.graph_objects as go
