@@ -1,5 +1,5 @@
 # Dashboard
-#Projeto de dashboard utilizando python e suas biblioteca#
+# Projeto de dashboard utilizando python e suas biblioteca #
 
 O banco de dados utilizado foi retirado deste link: https://www.kaggle.com/datasets/rodrigoriboldi/incidentes-de-segurana-da-informao-no-brasil?resource=download
 
